@@ -154,17 +154,6 @@
         document.head.appendChild(s);
     };
 
-    /* --- 7. AUTO-SCROLL LOGIC --- */
-    const autoScroll = () => {
-        if (!/Android|iPhone/i.test(navigator.userAgent)) return;
-        setTimeout(() => {
-            const vaultEl = document.querySelector('.deposit-box');
-            const factionEl = document.querySelector('form[data-action="donateCash"]');
-            if (vaultEl) vaultEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            else if (factionEl) factionEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 600);
-    };
-
     /* Save and Close Logic */
     document.addEventListener('click', (e) => {
         if (e.target.id === 'v-close-settings') {
