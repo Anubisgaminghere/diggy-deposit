@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Diggy Deposits
 // @namespace    TornDiggyDeposits
-// @version      1.5
+// @version      1.6
 // @description  Simple script that keeps data local to you, i want none of your nasty data. There is no external sharing period. 1 beep wallet change, 2 beeps and red D you have too much on you, set whether you deposit faction or vault when pressing the moveable floating D, buttons on both pages editted for ease to click. available on all versions. Right click on pc or touch and hold on mobile to access settings.
 // @author       User
 // @match        *.torn.com/*
@@ -120,12 +120,12 @@
     hud.addEventListener('touchstart', start, {passive: false});
     window.addEventListener('touchmove', move, {passive: false});
     window.addEventListener('touchend', stop);
-    hud.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; }); // Block system menu
+    hud.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; }); 
 
     hud.onmousedown = start; window.onmousemove = move; window.onmouseup = stop;
     hud.oncontextmenu = (e) => { e.preventDefault(); updateMenu(); menu.style.display = 'block'; };
 
-    /* --- 6. MONITOR & STYLES --- */
+    /* --- 6. MONITOR --- */
     setInterval(() => {
         const mEl = document.querySelector('#user-money') || document.querySelector('span[class*="money_"]');
         if (mEl) {
@@ -137,6 +137,7 @@
         }
     }, 2000);
 
+    /* --- 7. STYLES --- */
     const applyStyles = () => {
         if (document.getElementById('diggy-style-v1')) return;
         const s = document.createElement('style'); s.id = 'diggy-style-v1';
@@ -169,6 +170,5 @@
 
     document.body.appendChild(hud);
     applyStyles();
-    autoScroll();
     new MutationObserver(applyStyles).observe(document.body, {childList: true, subtree: true});
 })();
