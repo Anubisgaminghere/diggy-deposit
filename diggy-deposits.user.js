@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Diggy Deposits
 // @namespace    TornDiggyDeposits
-// @version      1.6
-// @description  Simple script that keeps data local to you, i want none of your nasty data. There is no external sharing period. 1 beep wallet change, 2 beeps and red D you have too much on you, set whether you deposit faction or vault when pressing the moveable floating D, buttons on both pages editted for ease to click. available on all versions. Right click on pc or touch and hold on mobile to access settings.
+// @version      1.7
+// @description  Simple script that keeps data local to you. 1 beep wallet change, 2 beeps and red D you have too much on you. Logic only runs when page is actively viewed.
 // @author       User
 // @match        *.torn.com/*
 // @grant        none
@@ -127,6 +127,9 @@
 
     /* --- 6. MONITOR --- */
     setInterval(() => {
+        // Only run monitor if tab is visible and focused
+        if (document.visibilityState !== 'visible' || !document.hasFocus()) return;
+
         const mEl = document.querySelector('#user-money') || document.querySelector('span[class*="money_"]');
         if (mEl) {
             let mVal = parseMoney(mEl.innerText);
