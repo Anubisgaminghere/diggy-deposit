@@ -27,7 +27,6 @@
         get target() { return localStorage.getItem('vUtilTarget') || 'vault'; },
         get limitRaw() { return localStorage.getItem('vUtilLimit') || '1m'; },
         get limit() { return parseMoney(this.limitRaw); },
-        // New Toggle States
         get allowChange() { return localStorage.getItem('vUtilBeepChange') !== 'false'; },
         get allowDanger() { return localStorage.getItem('vUtilBeepDanger') !== 'false'; },
         danger: false, lastM: -1
@@ -36,10 +35,8 @@
     /* --- 2. AUDIO --- */
     let ac = null;
     const beep = (isAlarm) => {
-        // Logic Check: Should we actually beep?
         if (!isAlarm && !state.allowChange) return;
         if (isAlarm && !state.allowDanger) return;
-
         try {
             if (!ac) ac = new (window.AudioContext || window.webkitAudioContext)();
             if (ac.state === 'suspended') ac.resume();
@@ -61,12 +58,10 @@
     const updateMenu = () => {
         menu.innerHTML = `
             <div style="color:#0f0; font-weight:bold; text-align:center; margin-bottom:15px; font-size:13px; font-family:sans-serif;">DIGGY DEPOSITS SETTINGS</div>
-
             <div style="margin-bottom:12px;">
                 <label style="display:flex; justify-content:space-between; font-size:10px; color:#999; font-family:sans-serif;">VOLUME <span style="color:#0f0;">${(state.vol*100).toFixed(0)}%</span></label>
                 <input type="range" id="v-vol-slide" min="0" max="1" step="0.05" value="${state.vol}" style="width:100%;">
             </div>
-
             <div style="margin-bottom:12px; display:flex; flex-direction:column; gap:6px;">
                 <label style="display:flex; align-items:center; font-size:10px; color:#eee; cursor:pointer;">
                     <input type="checkbox" id="v-beep-change" ${state.allowChange ? 'checked' : ''} style="margin-right:8px;"> ENABLE CHANGE BEEP (1)
@@ -75,12 +70,10 @@
                     <input type="checkbox" id="v-beep-danger" ${state.allowDanger ? 'checked' : ''} style="margin-right:8px;"> ENABLE DANGER BEEP (2)
                 </label>
             </div>
-
             <div style="margin-bottom:12px;">
                 <label style="font-size:10px; color:#999; font-family:sans-serif; display:block; margin-bottom:4px;">DANGER LIMIT (e.g. 10m, 5b)</label>
                 <input type="text" id="v-limit-input" value="${state.limitRaw}" style="width:100%; background:#222; color:#0f0; border:1px solid #444; border-radius:4px; padding:4px; box-sizing:border-box;">
             </div>
-
             <div style="margin-bottom:15px;">
                 <label style="font-size:10px; color:#999; font-family:sans-serif; display:block; margin-bottom:4px;">DEPOSIT TARGET</label>
                 <select id="v-target-select" style="width:100%; background:#222; color:#fff; border:1px solid #444; border-radius:4px; padding:4px;">
@@ -88,7 +81,6 @@
                     <option value="faction" ${state.target === 'faction' ? 'selected' : ''}>Faction Armory</option>
                 </select>
             </div>
-
             <div style="display:flex; gap:8px;">
                 <button id="v-test-beep" style="flex:1; padding:6px; background:#333; color:#fff; border:1px solid #555; border-radius:4px; font-size:10px; font-weight:bold; cursor:pointer;">TEST</button>
                 <button id="v-close-settings" style="flex:1; padding:6px; background:#040; color:#0f0; border:1px solid #0f0; border-radius:4px; font-size:10px; font-weight:bold; cursor:pointer;">SAVE & CLOSE</button>
@@ -98,7 +90,6 @@
     menu.setAttribute('style', `position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#111; color:#eee; border:1px solid #333; padding:15px; border-radius:8px; z-index:2147483647; display:none; width:220px; box-shadow:0 0 30px #000;`);
     document.body.appendChild(menu);
 
-    /* --- 4. LOGIC ENGINE --- */
     const navigate = (e) => {
         if (e && (e.button === 2)) return;
         const finalTarget = localStorage.getItem('vUtilTarget') || 'vault';
@@ -126,10 +117,8 @@
         return mEl;
     };
 
-    /* --- 5. MONITOR LOOP --- */
     setInterval(() => {
         if (document.visibilityState !== 'visible' || !document.hasFocus()) return;
-
         const mEl = initMoneyButton();
         if (mEl) {
             let mVal = parseMoney(mEl.innerText);
@@ -140,7 +129,6 @@
         }
     }, 1500);
 
-    /* --- 6. STYLES --- */
     const applyStyles = () => {
         if (document.getElementById('diggy-style-v2-2')) return;
         const s = document.createElement('style'); s.id = 'diggy-style-v2-2';
@@ -155,13 +143,11 @@
         document.head.appendChild(s);
     };
 
-    /* Save Logic */
     document.addEventListener('click', (e) => {
         if (e.target.id === 'v-close-settings') {
             localStorage.setItem('vUtilVol', document.getElementById('v-vol-slide').value);
             localStorage.setItem('vUtilTarget', document.getElementById('v-target-select').value);
             localStorage.setItem('vUtilLimit', document.getElementById('v-limit-input').value);
-            // Save Checkbox States
             localStorage.setItem('vUtilBeepChange', document.getElementById('v-beep-change').checked);
             localStorage.setItem('vUtilBeepDanger', document.getElementById('v-beep-danger').checked);
             menu.style.display = 'none';
